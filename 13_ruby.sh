@@ -26,4 +26,4 @@ cd rubygems-1.8.10
 ruby setup.rb
 
 gem source -a http://gems.github.com/
-gem source -a http://gems.rubyfourge.org/
+gem source -a http://gems.rubyfouge.org/
