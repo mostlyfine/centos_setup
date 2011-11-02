@@ -1,11 +1,15 @@
 #!/bin/sh
 
-#yum install gcc openssl-devel pcre-devel zlib-devel
-#useradd -s /sbin/nologin -d /usr/local/nginx -M nginx
 #
-#wget http://nginx.org/download/nginx-1.0.6.tar.gz
-#tar xvzf nginx-1.0.6.tar.gz
-cd nginx-1.0.6
+# configure via http://wiki.nginx.org/NginxModules
+#
+
+yum install gcc openssl-devel pcre-devel zlib-devel
+useradd -s /sbin/nologin -d /usr/local/nginx -M nginx
+
+wget http://nginx.org/download/nginx-1.1.7.tar.gz
+tar xvzf nginx-1.1.7.tar.gz
+cd nginx-1.1.7
 ./configure \
   --conf-path=/etc/nginx/nginx.conf \
   --pid-path=/var/run/nginx/nginx.pid  \
@@ -18,14 +22,16 @@ cd nginx-1.0.6
   --with-http_ssl_module \
   --with-http_gzip_static_module \
   --with-http_realip_module \
+  --with-http_fastcgi_module \
+  --with-http_perl_module \
   --http-client-body-temp-path=/var/tmp/nginx/client/ \
   --http-proxy-temp-path=/var/tmp/nginx/proxy/ \
   --http-fastcgi-temp-path=/var/tmp/nginx/fcgi/
 
 make && make install
 
-#mkdir -p /var/tmp/nginx/{proxy,client,fcgi}
-#chown -R nginx:nginx /usr/local/nginx
+mkdir -p /var/tmp/nginx/{proxy,client,fcgi}
+chown -R nginx:nginx /usr/local/nginx
 
 
 cat <<_EOT_ > /etc/init.d/nginx
@@ -175,4 +181,4 @@ cat <<EOT > /etc/logrotate.d/nginx
     endscript
 }
 EOT
-logrotate -d /etc/logrotate.conf
+#logrotate -d /etc/logrotate.conf
